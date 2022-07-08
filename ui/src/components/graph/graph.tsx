@@ -38,7 +38,7 @@ const Graph: React.FC<Props> = ({ data, nodeId }) => {
     if (!elements || elements.length === 0) {
       return;
     }
-
+    
     const values: Elements = [];
 
     for (let index = 0; index < elements.length; index++) {
@@ -63,6 +63,20 @@ const Graph: React.FC<Props> = ({ data, nodeId }) => {
 
     setElements(values);
   };
+
+  // calculate the height of the graph by finding the maximum y position of the nodes and adding some padding to take the size of the node into account
+  const calculateHeight = () => {
+    var padding = 200;
+    var max = 0;
+    for (let index = 0; index < elements.length; index++) {
+      console.debug(index);
+      const element = elements[index];
+      if (isNode(element)) {
+        if (element.position.y > max) max = element.position.y
+      }
+    }
+    return max + padding;
+  }
 
   // Highlight path of selected node, including all linked up and down stream nodes
   const highlightPath = (node: Node, check: boolean): void => {
@@ -146,7 +160,7 @@ const Graph: React.FC<Props> = ({ data, nodeId }) => {
     <div className="lineage-graph">
         <ReactFlowProvider>
           <ReactFlow
-            style={ { height: "700px", width: "100%" } }
+            style={ { height: calculateHeight(), width: "100%" } }
             elements={ elements }
             snapToGrid
             snapGrid={ [15, 15] }
