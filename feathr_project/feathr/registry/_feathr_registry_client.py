@@ -189,6 +189,7 @@ class _FeatureRegistry(FeathrRegistry):
         return check(requests.post(f"{self.endpoint}{path}", headers=self._get_auth_header(), json=body)).json()
 
     def _get_auth_header(self) -> dict:
+        logging.debu(self.credential)
         logging.debug(self.credential.get_token(".default").token)
         return {"Authorization": f'Bearer {self.credential.get_token(".default").token}'}
     
