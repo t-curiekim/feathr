@@ -189,10 +189,7 @@ class _FeatureRegistry(FeathrRegistry):
         return check(requests.post(f"{self.endpoint}{path}", headers=self._get_auth_header(), json=body)).json()
 
     def _get_auth_header(self) -> dict:
-        try:
-            return {"Authorization": f'Bearer {self.credential.get_token(".default").token}'}
-        except:
-            raise RuntimeError("Runtime error in getting token")
+        return {"Authorization": f'Bearer {self.credential.get_token("{self.endpoint}{path}.default").token}'}
     
     @classmethod
     def _get_py_files(self, path: Path) -> List[Path]:
