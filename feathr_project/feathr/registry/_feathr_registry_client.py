@@ -189,7 +189,7 @@ class _FeatureRegistry(FeathrRegistry):
         return check(requests.post(f"{self.endpoint}{path}", headers=self._get_auth_header(), json=body)).json()
 
     def _get_auth_header(self) -> dict:
-        return {"Authorization": f'Bearer {self.credential.get_token(".default")}'}
+        return {"Authorization": f'Bearer {self.credential.get_token("{self.endpoint}{path}/.default")}'}
     
     @classmethod
     def _get_py_files(self, path: Path) -> List[Path]:
