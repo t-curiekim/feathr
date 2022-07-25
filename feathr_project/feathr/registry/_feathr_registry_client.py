@@ -83,7 +83,6 @@ class _FeatureRegistry(FeathrRegistry):
         self.project_name = project_name
         self.project_tags = project_tags
         self.endpoint = endpoint
-        logging.error(credential)
         self.credential = DefaultAzureCredential() if credential is None else credential
         self.project_id = None
 
@@ -186,7 +185,7 @@ class _FeatureRegistry(FeathrRegistry):
     def _post(self, path: str, body: dict) -> dict:
         logging.debug("PATH: ", path)
         logging.debug("BODY: ", json.dumps(body, indent=2))
-        return check(requests.post(f"{self.endpoints}{path}", headers=self._get_auth_header(), json=body)).json()
+        return check(requests.post(f"{self.endpoint}{path}", headers=self._get_auth_header(), json=body)).json()
 
     def _get_auth_header(self) -> dict:
         self.credential = DefaultAzureCredential()
