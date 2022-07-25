@@ -84,8 +84,7 @@ class _FeatureRegistry(FeathrRegistry):
         self.project_tags = project_tags
         self.endpoint = endpoint
         logging.error(credential)
-        self.credential = DefaultAzureCredential(
-            exclude_interactive_browser_credential=False) if credential is None else credential
+        self.credential = SharedTokenCacheCredential if credential is None else credential
         self.project_id = None
 
     def register_features(self, workspace_path: Optional[Path] = None, from_context: bool = True, anchor_list=[], derived_feature_list=[]):
