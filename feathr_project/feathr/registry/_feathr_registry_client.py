@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 from urllib.parse import urlparse
 from uuid import UUID
-from azure.identity import DefaultAzureCredential, SharedTokenCacheCredential
+from azure.identity import DefaultAzureCredential
 from typing import Any, Dict, List, Optional, Tuple
 from re import sub
 from jinja2 import Template
@@ -84,7 +84,7 @@ class _FeatureRegistry(FeathrRegistry):
         self.project_tags = project_tags
         self.endpoint = endpoint
         logging.error(credential)
-        self.credential = SharedTokenCacheCredential if credential is None else credential
+        self.credential = DefaultAzureCredential() if credential is None else credential
         self.project_id = None
 
     def register_features(self, workspace_path: Optional[Path] = None, from_context: bool = True, anchor_list=[], derived_feature_list=[]):
@@ -186,11 +186,11 @@ class _FeatureRegistry(FeathrRegistry):
     def _post(self, path: str, body: dict) -> dict:
         logging.debug("PATH: ", path)
         logging.debug("BODY: ", json.dumps(body, indent=2))
-        return check(requests.post(f"{self.endpoint}{path}", headers=self._get_auth_header(), json=body)).json()
+        return check(requests.post(f"{self.endpoints}{path}", headers=self._get_auth_header(), json=body)).json()
 
     def _get_auth_header(self) -> dict:
-        self.credential = SharedTokenCacheCredential()
-        return {"Authorization": f'Bearer {self.credential.get_token(".default")}'}
+        self.credential = DefaultAzureCredential()
+        return {"Authorization": f'Bearer {self.credential.get_token("https://dev.azuresynapse.net/.default")}'}
     
     @classmethod
     def _get_py_files(self, path: Path) -> List[Path]:
