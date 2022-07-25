@@ -189,7 +189,7 @@ class _FeatureRegistry(FeathrRegistry):
 
     def _get_auth_header(self) -> dict:
         self.credential = DefaultAzureCredential()
-        return {"Authorization": f'Bearer {self.credential.get_token(".default")}'}
+        return {"Authorization": f'Bearer {self.credential.get_token("https://management.azure.com/.default")}'}
     
     @classmethod
     def _get_py_files(self, path: Path) -> List[Path]:
