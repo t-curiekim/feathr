@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 from urllib.parse import urlparse
 from uuid import UUID
-from azure.identity import DefaultAzureCredential
+from azure.identity import DefaultAzureCredential, SharedTokenCacheCredential
 from typing import Any, Dict, List, Optional, Tuple
 from re import sub
 from jinja2 import Template
@@ -190,8 +190,7 @@ class _FeatureRegistry(FeathrRegistry):
         return check(requests.post(f"{self.endpoint}{path}", headers=self._get_auth_header(), json=body)).json()
 
     def _get_auth_header(self) -> dict:
-        self.credential = DefaultAzureCredential(
-            exclude_interactive_browser_credential=False)
+        self.credential = SharedTokenCacheCredential()
         return {"Authorization": f'Bearer {self.credential.get_token(".default")}'}
     
     @classmethod
