@@ -83,6 +83,7 @@ class _FeatureRegistry(FeathrRegistry):
         self.project_name = project_name
         self.project_tags = project_tags
         self.endpoint = endpoint
+        logging.error(credential)
         self.credential = DefaultAzureCredential(
             exclude_interactive_browser_credential=False) if credential is None else credential
         self.project_id = None
@@ -189,6 +190,8 @@ class _FeatureRegistry(FeathrRegistry):
         return check(requests.post(f"{self.endpoint}{path}", headers=self._get_auth_header(), json=body)).json()
 
     def _get_auth_header(self) -> dict:
+        self.credential = DefaultAzureCredential(
+            exclude_interactive_browser_credential=False)
         return {"Authorization": f'Bearer {self.credential.get_token(".default")}'}
     
     @classmethod
